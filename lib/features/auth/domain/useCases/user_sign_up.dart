@@ -5,6 +5,7 @@ import 'package:fpdart/src/either.dart';
 
 class UserSignUp implements UseCase<String, UserSignUpParams> {
   final AuthRepository authRepository;
+
   const UserSignUp(this.authRepository);
 
   @override

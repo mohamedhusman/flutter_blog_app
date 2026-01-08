@@ -7,12 +7,18 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserSignUp _userSignUp;
-  AuthBloc({
-    required UserSignUp userSignUp
-  }) : _userSignUp = userSignUp, 
-        super(AuthInitial()) {
-    on<AuthSignUp>((event,emit){
-      _userSignUp(UserSignUpParams(event.email, event.password, event.name)))
+  AuthBloc({required UserSignUp userSignUp})
+    : _userSignUp = userSignUp,
+      super(AuthInitial()) {
+    on<AuthSignUp>((event, emit) async {
+      final res = await _userSignUp(
+        UserSignUpParams(event.email, event.password, event.name),
+      );
+
+      res.fold(
+        (failure) => emit(AuthFailure(failure.message)),
+        (uid) => emit(AuthSuccess(uid)),
+      );
     });
   }
 }
